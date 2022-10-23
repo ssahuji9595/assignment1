@@ -1,0 +1,27 @@
+pipeline {
+    agent
+    {
+        label{
+            label 'SLAVE-2'
+            customWorkspace '/mnt/repo'
+        }
+    }
+    stages {
+        stage ('stage-1')
+        {
+            steps {
+            sh '''
+            sudo rm -rf *
+            sudo git clone https://github.com/ssahuji9595/assignment1
+            cd assignment1
+            //sudo git checkout Q2
+            //sudo docker stop shubh
+            sudo docker system prune -a -f
+            sudo docker run -itdp 100:80 --name shubh httpd
+            sudo chmod 777 index.html
+            sudo docker cp index.html shubh:/usr/local/apache2/htdocs  
+            '''
+            }
+        }
+    }
+}
